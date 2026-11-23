@@ -1,0 +1,4 @@
+/* Header Component Styles */
+header {
+  backdrop-filter: blur(8px);
+}

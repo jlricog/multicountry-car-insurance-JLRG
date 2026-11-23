@@ -1,0 +1,4 @@
+/* Step 3 Summary Custom Styles */
+.summary-box {
+  background: radial-gradient(circle at top right, rgba(30, 41, 59, 0.4), transparent);
+}
