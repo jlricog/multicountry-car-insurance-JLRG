@@ -53,9 +53,11 @@ export class Step3SummaryComponent implements OnInit {
     this.store.setStep(2);
   }
 
-  onPay() {
+  onPay(simulateFail = false) {
     if (this.store.isTermsAccepted() && !this.store.isPaymentProcessing()) {
-      this.store.processSimulatedPayment();
+      this.store.processSimulatedPayment(simulateFail).catch(() => {
+        // Payment error state handled via store.paymentError signal
+      });
     }
   }
 

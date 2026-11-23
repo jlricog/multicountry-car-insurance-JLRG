@@ -99,12 +99,23 @@ export class WizardStoreService {
     this.isTermsAccepted.set(accepted);
   }
 
-  processSimulatedPayment(): Promise<QuoteTransaction> {
+  readonly paymentError = signal<string | null>(null);
+
+  processSimulatedPayment(simulateError = false): Promise<QuoteTransaction> {
     this.isPaymentProcessing.set(true);
+    this.paymentError.set(null);
 
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         this.isPaymentProcessing.set(false);
+
+        if (simulateError) {
+          const errorMsg = 'El pago simulado fue rechazado por la pasarela de prueba. Puedes reintentar sin perder tu información.';
+          this.paymentError.set(errorMsg);
+          reject(new Error(errorMsg));
+          return;
+        }
+
         const country = this.activeCountry();
         const randomNum = Math.floor(10000 + Math.random() * 90000);
         const quoteNum = `POL-${country.code}-${new Date().getFullYear()}-${randomNum}`;
@@ -123,6 +134,7 @@ export class WizardStoreService {
         resolve(transaction);
       }, 1500);
     });
+  }
   }
 
   resetWizard() {
